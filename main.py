@@ -1,6 +1,7 @@
 from FileWriter import FileWriter
 from HhClient import HhClient
 
+import sys
 import pandas as pd
 
 MAIN_URL = 'https://api.hh.ru/'
@@ -48,9 +49,11 @@ def get_salaries_info(filename: str) -> dict:
 
 
 def main():
+    if len(sys.argv) < 2:
+        raise RuntimeError("Необходимо передать строку поиска!")
     hh_client = HhClient()
     params = {
-        'text': 'php',
+        'text': sys.argv[1],
         'page': 0,
         'per_page': 100,
         'schedule': 'remote',
