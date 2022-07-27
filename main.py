@@ -1,5 +1,6 @@
 from FileWriter import FileWriter
 from HhClient import HhClient
+from CurrencyClient import CurrencyClient
 
 import sys
 import pandas as pd
@@ -15,6 +16,7 @@ def get_vacancy_data(data: dict) -> dict:
         data["salary"]["to"] if data["salary"]["from"] is None else
         calc_avg_salary(
             data["salary"]["from"], data["salary"]["to"]),
+        "currency": data["salary"]["currency"]
     }
     return result
 
@@ -34,7 +36,7 @@ def get_skills(filename: str):
     return data.groupby(['skill']).size().sort_values(ascending=False).head(10)
 
 
-def calc_avg_salary(salary_from: int, salary_to: int) -> int:
+def calc_avg_salary(salary_from: int, salary_to: int) -> float:
     return (salary_from + salary_to) // 2
 
 
@@ -51,6 +53,8 @@ def get_salaries_info(filename: str) -> dict:
 def main():
     if len(sys.argv) < 2:
         raise RuntimeError("Необходимо передать строку поиска!")
+    cc = CurrencyClient()
+    currencies = cc.get_currencies()
     hh_client = HhClient()
     params = {
         'text': sys.argv[1],
@@ -78,6 +82,10 @@ def main():
         for item in vacancies["items"]:
             vacancy = hh_client.get_vacancy(item["id"])
             vacancy_data = get_vacancy_data(vacancy)
+            if vacancy_data["currency"] != "RUR":
+                vacancy_data["salary"] = vacancy_data["salary"] * float(
+                    currencies[vacancy_data["currency"]].replace(',', '.'))
+            del vacancy_data["currency"]
             vacancy_writer.write_data(vacancy_data)
             vacancy_skills = get_vacancy_skills(item["id"], vacancy["key_skills"])
             for skill in vacancy_skills:
@@ -93,7 +101,6 @@ def main():
     print('Максимальная зарплата: {}'.format(salary_data["max"]))
     print('Минимальная зарплата: {}'.format(salary_data["min"]))
     print('Средняя зарплата: {}'.format(salary_data["mean"]))
-
 
 
 if __name__ == '__main__':
