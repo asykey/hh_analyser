@@ -25,7 +25,7 @@ def main():
     total = response["found"]
 
     vacancy_writer = FileWriter('vacancies.csv')
-    vacancy_writer.set_fields(['id', 'name', 'salary', 'skills', 'url'])
+    vacancy_writer.set_fields(['id', 'name', 'salary', 'url'])
 
     skills_writer = FileWriter('skills.csv')
     skills_writer.set_fields(['id', 'skill'])
