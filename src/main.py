@@ -38,6 +38,8 @@ def main():
             vacancy = hh_client.get_vacancy(config.VACANCIES_URL, item["id"])
             vacancy_data = vacancy_service.get_vacancy_data(vacancy)
             if vacancy_data["currency"] != "RUR":
+                if vacancy_data["currency"] == "BYR":
+                    vacancy_data["currency"] = "BYN"
                 vacancy_data["salary"] = vacancy_data["salary"] * currencies[vacancy_data["currency"]]
             del vacancy_data["currency"]
             vacancy_writer.write_data(vacancy_data)
