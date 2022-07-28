@@ -9,7 +9,7 @@ def get_skills(filename: str):
 def get_salaries_info(filename: str) -> dict:
     data = pd.read_csv(filename, delimiter=';')
     result = {
-        'mean': data['salary'].mean(),
+        'mean': round(data['salary'].mean()),
         'min': data['salary'].min(),
         'max': data['salary'].max()
     }
