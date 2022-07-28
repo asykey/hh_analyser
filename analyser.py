@@ -14,3 +14,8 @@ def get_salaries_info(filename: str) -> dict:
         'max': data['salary'].max()
     }
     return result
+
+
+def get_total_vacancies(filename: str) -> int:
+    data = pd.read_csv(filename, delimiter=';')
+    return data.count()[0]

@@ -20,10 +20,6 @@ def main():
         'only_with_salary': True
     }
 
-    response = hh_client.get_vacancies(config.VACANCIES_URL, params)
-
-    total = response["found"]
-
     vacancy_writer = FileWriter('vacancies.csv')
     vacancy_writer.set_fields(['id', 'name', 'salary', 'url'])
 
@@ -32,6 +28,7 @@ def main():
 
     currencies = currency_client.get_currencies(config.CBR_URL)
 
+    response = hh_client.get_vacancies(config.VACANCIES_URL, params)
     begin = 0
     end = response["pages"]
     while begin <= end:
@@ -49,15 +46,16 @@ def main():
                 skills_writer.write_data(skill)
         begin = begin + 1
 
+    total = analyser.get_total_vacancies('vacancies.csv')
     print('Всего найдено {} вакансий'.format(total))
     skills = analyser.get_skills('skills.csv')
     print("Наиболее часто встречающиеся смежные навыки:")
     print(skills)
     salary_data = analyser.get_salaries_info('vacancies.csv')
     print('Зарплатные данные по запросу:')
-    print('Максимальная зарплата: {}'.format(salary_data["max"]))
-    print('Минимальная зарплата: {}'.format(salary_data["min"]))
-    print('Средняя зарплата: {}'.format(salary_data["mean"]))
+    print('Максимальная зарплата: {} RUB'.format(salary_data["max"]))
+    print('Минимальная зарплата: {} RUB'.format(salary_data["min"]))
+    print('Средняя зарплата: {} RUB'.format(salary_data["mean"]))
 
 
 if __name__ == '__main__':
