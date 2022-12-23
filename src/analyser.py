@@ -1,5 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 
 
 def get_skills(filename: str):
@@ -9,8 +8,6 @@ def get_skills(filename: str):
 
 def get_salaries_info(filename: str) -> dict:
     data = pd.read_csv(filename, delimiter=';')
-    plt.boxplot(x = data['salary'])
-    plt.show()
     result = {
         'mean': round(data['salary'].mean()),
         'min': round(data['salary'].min()),
