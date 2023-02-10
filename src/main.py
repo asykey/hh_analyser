@@ -57,7 +57,7 @@ def main():
     print('Зарплатные данные по запросу:')
     print('Максимальная зарплата: {} RUB'.format(salary_data["max"]))
     print('Минимальная зарплата: {} RUB'.format(salary_data["min"]))
-    print('Средняя зарплата: {} RUB'.format(salary_data["mean"]))
+    print('Медианная зарплата: {} RUB'.format(salary_data["median"]))
 
 
 if __name__ == '__main__':
